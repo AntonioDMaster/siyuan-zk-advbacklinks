@@ -15,7 +15,7 @@ async function request(url: string, data: any) {
     let response: IWebSocketData = await fetchSyncPost(url, data);
     let res = response.code === 0 ? response.data : null;
     if (response.code != 0) {
-        console.log(`反链面板插件接口异常 url : ${url} , msg : ${response.msg}`)
+        console.log(`Backlink panel API error. url: ${url}, msg: ${response.msg}`)
     }
     return res;
 }
@@ -315,7 +315,7 @@ export async function getBatchBlockIdIndex(ids: string[]): Promise<Map<BlockId, 
         }
     } catch (err) {
         getSuccess = false;
-        console.error("批量获取块索引报错，可能是旧版本不支持批量接口 : ", err)
+        console.error("Failed to fetch block indexes in batch; older versions may not support the batch API: ", err)
     }
 
     if (!getSuccess) {
@@ -324,7 +324,7 @@ export async function getBatchBlockIdIndex(ids: string[]): Promise<Map<BlockId, 
             try {
                 index = await getBlockIndex(id);
             } catch (err) {
-                console.error("获取块索引报错 : ", err)
+                console.error("Failed to fetch block index: ", err)
             }
             idMap.set(id, index)
         }

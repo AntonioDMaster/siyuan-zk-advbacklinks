@@ -1,11 +1,11 @@
 {
-  "name": "syplugin-backlink-panel",
+  "name": "siyuan-zk-advbacklinks",
   "version": "0.0.4",
   "type": "module",
   "description": "SiYuan Note Plugin: Filterable Backlink Panel",
-  "repository": "https://github.com/Misuzu2027/syplugin-backlink-panel",
-  "homepage": "https://github.com/Misuzu2027/syplugin-backlink-panel",
-  "author": "Misuzu2027",
+  "repository": "https://github.com/AntonioDMaster/siyuan-zk-advbacklinks",
+  "homepage": "https://github.com/AntonioDMaster/siyuan-zk-advbacklinks",
+  "author": "AntonioDMaster",
   "license": "MIT",
   "scripts": {
     "make-link": "node  --no-warnings ./scripts/make_dev_link.js",

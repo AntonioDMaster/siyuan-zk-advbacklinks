@@ -23,7 +23,7 @@ export class DockService {
 
 function addBacklinkPanelDock() {
     if (!EnvConfig.ins || !EnvConfig.ins.plugin) {
-        console.log("添加反链面板 dock 失败。")
+        console.log("Failed to add Backlink Panel dock.")
         return;
     }
     let dockDisplay = SettingService.ins.SettingConfig.dockDisplay;
@@ -38,7 +38,7 @@ function addBacklinkPanelDock() {
             position: "RightBottom",
             size: { width: 300, height: 0 },
             icon: CUSTOM_ICON_MAP.BacklinkPanelFilter.id,
-            title: "反链过滤面板 Dock",
+            title: EnvConfig.ins.i18n.dockTitleBacklinkPanel,
             hotkey: "⌥⇧B",
             show: false,
         },

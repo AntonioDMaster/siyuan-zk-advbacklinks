@@ -35,11 +35,11 @@ export function BACKLINK_BLOCK_SORT_METHOD_ELEMENT(): { name: string, value: Blo
             value: "alphabeticDesc",
         },
         {
-            name: "文档名称升序",
+            name: EnvConfig.ins.i18n.docNameASC,
             value: "documentAlphabeticAsc",
         },
         {
-            name: "文档名称降序",
+            name: EnvConfig.ins.i18n.docNameDESC,
             value: "documentAlphabeticDesc",
         },
     ];
@@ -69,15 +69,15 @@ export function CUR_DOC_DEF_BLOCK_TYPE_ELEMENT(): { name: string, value: string 
 
     return [
         {
-            name: "当前文档定义块",
+            name: EnvConfig.ins.i18n.curDocDefBlock,
             value: "curDocDefBlock",
         },
         {
-            name: "引用其他文档的定义块",
+            name: EnvConfig.ins.i18n.curDocRefDefBlock,
             value: "curDocRefDefBlock",
         },
         {
-            name: "上面所有",
+            name: EnvConfig.ins.i18n.allDefBlocks,
             value: "all",
         },
     ];
@@ -89,15 +89,15 @@ export function RELATED_DEF_BLOCK_TYPE_ELEMENT(): { name: string, value: string 
 
     return [
         {
-            name: "所有",
+            name: EnvConfig.ins.i18n.relatedDefBlockType_all,
             value: "all",
         },
         {
-            name: "动态锚文本",
+            name: EnvConfig.ins.i18n.relatedDefBlockType_dynamicAnchorText,
             value: "dynamicAnchorText",
         },
         {
-            name: "静态锚文本",
+            name: EnvConfig.ins.i18n.relatedDefBlockType_staticAnchorText,
             value: "staticAnchorText",
         },
     ];

@@ -10,7 +10,7 @@ export function getObjectSizeInKB(obj: any): number {
         const kilobytes = bytes / 1024;
         return kilobytes;
     } catch (err) {
-        console.log("计算对象大小报错")
+        console.log("Error while calculating object size")
     }
     return 0;
 }

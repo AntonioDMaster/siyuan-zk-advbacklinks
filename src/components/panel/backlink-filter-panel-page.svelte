@@ -8,7 +8,7 @@
         RELATED_DEF_BLOCK_TYPE_ELEMENT,
         RELATED_DOCMUMENT_SORT_METHOD_ELEMENT,
     } from "@/models/backlink-constant";
-    import {
+    import type {
         IBacklinkFilterPanelData,
         IBacklinkFilterPanelDataQueryParams,
         IBacklinkPanelRenderData,
@@ -40,14 +40,8 @@
         removePrefixAndSuffix,
         splitKeywordStringToArray,
     } from "@/utils/string-util";
-    import {
-        Constants,
-        openMobileFileById,
-        Protyle,
-        TProtyleAction,
-        Custom,
-        openTab,
-    } from "siyuan";
+    import { Constants, openMobileFileById, Protyle, openTab } from "siyuan";
+    import type { TProtyleAction, Custom } from "siyuan";
     import { onDestroy, onMount } from "svelte";
     import { getBlockTypeIconHref } from "@/utils/icon-util";
     import { CacheManager } from "@/config/CacheManager";
@@ -776,14 +770,7 @@
         protyle: Protyle,
     ) {
         // 手动发送一下加载 Protyle 事件，实验方法，仅对自己的插件起效
-        EnvConfig.ins.plugin.app.plugins.forEach((item) => {
-            if (item.name != "syplugin-image-pin-preview") {
-                return;
-            }
-            item.eventBus.emit("loaded-protyle-static", {
-                protyle: protyle.protyle,
-            });
-        });
+        // Removed cross-plugin event emission for safety and compatibility
         let protyleContentElement = protyle.protyle.contentElement;
 
         let backlinkBlockId = backlinkData.backlinkBlock.id;
@@ -978,8 +965,8 @@
 <span class="b3-list-item__text ariaLabel"  aria-label="${docAriaText}"  >
 ${documentName}
 </span>
-<svg class="b3-list-item__graphic counter ariaLabel expand-listitem-icon" aria-label="展开所有列表项"><use xlink:href="#iconLiElementExpand"></use></svg>
-<svg class="b3-list-item__graphic counter ariaLabel collapse-listitem-icon" aria-label="折叠所有列表项"><use xlink:href="#iconLiElementCollapse"></use></svg>
+<svg class="b3-list-item__graphic counter ariaLabel expand-listitem-icon" aria-label="${EnvConfig.ins.i18n.tooltipExpandAllListItems}"><use xlink:href="#iconLiElementExpand"></use></svg>
+<svg class="b3-list-item__graphic counter ariaLabel collapse-listitem-icon" aria-label="${EnvConfig.ins.i18n.tooltipCollapseAllListItems}"><use xlink:href="#iconLiElementCollapse"></use></svg>
 `;
         documentLiElement.addEventListener("click", (event: MouseEvent) => {
             clickBacklinkDocumentLiElement(event);
@@ -1001,6 +988,17 @@ ${documentName}
             const target = event.currentTarget as HTMLElement;
             toggleBacklinkDocument(target);
         });
+
+        documentLiElement
+            .querySelector(
+                "li > svg.b3-list-item__graphic.counter.ariaLabel.expand-listitem-icon",
+            )
+            .setAttribute("aria-label", EnvConfig.ins.i18n.tooltipExpandAllListItems);
+        documentLiElement
+            .querySelector(
+                "li > svg.b3-list-item__graphic.counter.ariaLabel.collapse-listitem-icon",
+            )
+            .setAttribute("aria-label", EnvConfig.ins.i18n.tooltipCollapseAllListItems);
 
         documentLiElement
             .querySelector(
@@ -1360,11 +1358,11 @@ ${documentName}
 <div class="backlink-panel__area">
     {#if !rootId}
         <p style="padding: 10px 20px;">
-            没有获取到当前文档信息，请切换文档重试
+            {EnvConfig.ins.i18n.hintNoCurrentDoc}
         </p>
     {/if}
     {#if displayHintPanelBaseDataCacheUsage}
-        <p style="padding: 10px 20px;">此次面板使用了缓存数据</p>
+        <p style="padding: 10px 20px;">{EnvConfig.ins.i18n.hintUsedPanelCache}</p>
     {/if}
     <div class="backlink-panel__header">
         <div
@@ -1377,13 +1375,13 @@ ${documentName}
             <div class="block__logo" style="font-weight: bold;">
                 <svg class="block__logoicon"
                     ><use xlink:href="#iconFilter"></use></svg
-                >筛选面板
+                >{EnvConfig.ins.i18n.panelFilterTitle}
             </div>
             <span class="fn__flex-1"></span>
             <span class="fn__space"></span>
             <span
                 class="block__icon ariaLabel"
-                aria-label="恢复默认"
+                aria-label={EnvConfig.ins.i18n.actionReset}
                 on:click|stopPropagation={resetFilterQueryParametersToDefault}
                 on:keydown={handleKeyDownDefault}
                 ><svg class=""
@@ -1394,7 +1392,7 @@ ${documentName}
             <span class="fn__space"></span>
             <span
                 class="block__icon ariaLabel"
-                aria-label="清除缓存并刷新"
+                aria-label={EnvConfig.ins.i18n.actionClearCacheAndRefresh}
                 on:click|stopPropagation={clearCacheAndRefresh}
                 on:keydown={handleKeyDownDefault}
                 ><svg class=""><use xlink:href="#iconRefresh"></use></svg></span
@@ -1402,12 +1400,12 @@ ${documentName}
             <span class="fn__space"></span>
             <span class="fn__space"></span>
             {#if panelFilterViewExpand}
-                <span class="block__icon ariaLabel" aria-label="折叠">
+                <span class="block__icon ariaLabel" aria-label={EnvConfig.ins.i18n.actionCollapse}>
                     <svg><use xlink:href="#iconUp"></use></svg>
                 </span>
             {/if}
             {#if !panelFilterViewExpand}
-                <span class="block__icon ariaLabel" aria-label="展开">
+                <span class="block__icon ariaLabel" aria-label={EnvConfig.ins.i18n.actionExpand}>
                     <svg><use xlink:href="#iconDown"></use></svg>
                 </span>
             {/if}
@@ -1417,7 +1415,7 @@ ${documentName}
     {#if backlinkFilterPanelRenderData && panelFilterViewExpand}
         <div class="backlink-panel-filter">
             <div class="fn__flex">
-                <div class="filter-panel__sub_title">定义块范围：</div>
+                <div class="filter-panel__sub_title">{EnvConfig.ins.i18n.labelDefBlockScope}</div>
                 <select
                     class="b3-select fn__flex-center"
                     bind:value={queryCurDocDefBlockRange}
@@ -1493,7 +1491,7 @@ ${documentName}
                 </div>
             </div>
             <div class="fn__flex">
-                <div class="filter-panel__sub_title">关联的定义块：</div>
+                <div class="filter-panel__sub_title">{EnvConfig.ins.i18n.labelRelatedDefBlocks}</div>
                 <select
                     class="b3-select fn__flex-center"
                     bind:value={queryParams.filterPanelRelatedDefBlockType}
@@ -1571,7 +1569,7 @@ ${documentName}
                 </div>
             </div>
             <div class="fn__flex">
-                <div class="filter-panel__sub_title">反链所在文档：</div>
+                <div class="filter-panel__sub_title">{EnvConfig.ins.i18n.labelBacklinkDocuments}</div>
                 <select
                     class="b3-select fn__flex-center"
                     bind:value={
@@ -1641,7 +1639,7 @@ ${documentName}
                         class="b3-button save-button"
                         on:click={() => {
                             showSaveCriteriaInputBox = true;
-                        }}>保存当前条件</button
+                        }}>{EnvConfig.ins.i18n.saveCurrentCriteria}</button
                     >
                     {#if savedQueryParamMap}
                         {#each savedQueryParamMap.keys() as name}
@@ -1681,16 +1679,16 @@ ${documentName}
                             type="text"
                             bind:value={saveCriteriaInputText}
                             class="b3-text-field input-field"
-                            placeholder="请输入名称"
+                            placeholder={EnvConfig.ins.i18n.inputPlaceholderEnterName}
                         />
                         <div class="buttons">
                             <button
                                 class="cancel-button b3-button b3-button--outline"
-                                on:click={handleCriteriaCancel}>取消</button
+                                on:click={handleCriteriaCancel}>{EnvConfig.ins.i18n.buttonCancel}</button
                             >
                             <button
                                 class="confirm-button b3-button"
-                                on:click={handleCriteriaConfirm}>确定</button
+                                on:click={handleCriteriaConfirm}>{EnvConfig.ins.i18n.buttonConfirm}</button
                             >
                         </div>
                     </div>
@@ -1710,13 +1708,13 @@ ${documentName}
             <div class="block__logo" style="font-weight: bold;">
                 <svg class="block__logoicon"
                     ><use xlink:href="#iconLink"></use></svg
-                >反向链接
+                >{EnvConfig.ins.i18n.labelBacklinksTitle}
             </div>
             <span class="fn__flex-1"></span>
             <span class="fn__space"></span>
             <span
                 class="block__icon b3-tooltips b3-tooltips__sw"
-                aria-label="恢复默认"
+                aria-label={EnvConfig.ins.i18n.actionReset}
                 on:click|stopPropagation={resetBacklinkQueryParametersToDefault}
                 on:keydown={handleKeyDownDefault}
                 ><svg class=""
@@ -1729,7 +1727,7 @@ ${documentName}
             {#if panelBacklinkViewExpand}
                 <span
                     class="block__icon b3-tooltips b3-tooltips__sw"
-                    aria-label="折叠"
+                    aria-label={EnvConfig.ins.i18n.actionCollapse}
                 >
                     <svg><use xlink:href="#iconUp"></use></svg>
                 </span>
@@ -1737,7 +1735,7 @@ ${documentName}
             {#if !panelBacklinkViewExpand}
                 <span
                     class="block__icon b3-tooltips b3-tooltips__sw"
-                    aria-label="展开"
+                    aria-label={EnvConfig.ins.i18n.actionExpand}
                 >
                     <svg><use xlink:href="#iconDown"></use></svg>
                 </span>
@@ -1750,7 +1748,7 @@ ${documentName}
                     bind:value={queryParams.backlinkCurDocDefBlockType}
                     on:change={updateRenderData}
                     style="flex: 0.5;"
-                    aria-label="当前文档定义块类型"
+                    aria-label={EnvConfig.ins.i18n.labelCurrentDocDefBlockType}
                 >
                     {#each RELATED_DEF_BLOCK_TYPE_ELEMENT() as element}
                         <option
@@ -1787,7 +1785,7 @@ ${documentName}
 
                 <span
                     class="block__icon b3-tooltips b3-tooltips__sw"
-                    aria-label="展开所有文档"
+                    aria-label={EnvConfig.ins.i18n.ariaExpandAllDocs}
                     on:click={expandAllBacklinkDocument}
                     on:contextmenu={expandAllBacklinkListItemNode}
                     on:keydown={handleKeyDownDefault}
@@ -1797,7 +1795,7 @@ ${documentName}
                 <span class="fn__space"></span>
                 <span
                     class="block__icon b3-tooltips b3-tooltips__sw"
-                    aria-label="折叠所有文档"
+                    aria-label={EnvConfig.ins.i18n.ariaCollapseAllDocs}
                     on:click={collapseAllBacklinkDocument}
                     on:contextmenu={collapseAllBacklinkListItemNode}
                     on:keydown={handleKeyDownDefault}
@@ -1878,7 +1876,7 @@ ${documentName}
     >
         <div class="sy__backlink">
             {#if displayHintBacklinkBlockCacheUsage}
-                <div>此次查询使用了缓存数据</div>
+                <div>{EnvConfig.ins.i18n.hintUsedBacklinkCache}</div>
             {/if}
             <div class="block__icons" style="display: none;"></div>
             <div class="fn__flex-1">
@@ -1994,7 +1992,7 @@ ${documentName}
             transform 0.3s ease,
             box-shadow 0.3s ease;
     }
-    /* 悬停效果 */
+    /* 悬停效果（保留占位注释，移除空规则） */
     .backlink-panel-filter:hover {
         /* border: 1px solid #ccc; */
         /* transform: translateY(-2px); 悬浮效果 */

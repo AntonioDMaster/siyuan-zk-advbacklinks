@@ -59,7 +59,7 @@ export class SettingService {
         if (!plugin) {
             return;
         }
-        console.log(`反链面板 更新设置配置文件: ${paramJson}`);
+        console.log(`Backlink panel: Updated settings file: ${paramJson}`);
         plugin.saveData(SettingFileName, paramJson);
     }
 
@@ -77,7 +77,7 @@ export class SettingService {
         if (paramJson == curSettingConfigJson) {
             return;
         }
-        console.log(`反链面板 更新设置配置文件: ${paramJson}`);
+        console.log(`Backlink panel: Updated settings file: ${paramJson}`);
         this._settingConfig = { ...settingConfigParam };
         plugin.saveData(SettingFileName, paramJson);
     }
@@ -99,10 +99,10 @@ async function getPersistentConfig(): Promise<SettingConfig> {
     }
     let loaded = await plugin.loadData(SettingFileName);
     if (loaded == null || loaded == undefined || loaded == '') {
-        console.info(`反链面板插件 没有配置文件，使用默认配置`)
+        console.info(`Backlink panel: No settings file found, using default configuration`)
     } else {
         //如果有配置文件，则使用配置文件
-        // console.info(`读入配置文件: ${SettingFileName}`)
+        // console.info(`Read settings file: ${SettingFileName}`)
         if (typeof loaded === 'string') {
             loaded = JSON.parse(loaded);
         }
@@ -112,7 +112,7 @@ async function getPersistentConfig(): Promise<SettingConfig> {
                 setKeyValue(settingConfig, key, loaded[key]);
             }
         } catch (error_msg) {
-            console.log(`Setting load error: ${error_msg}`);
+            console.log(`Backlink panel: Failed to load settings: ${error_msg}`);
         }
     }
     return settingConfig;

@@ -53,10 +53,7 @@
                             {:else if itemProperty.type == "number" || itemProperty.type == "text"}
                                 <SettingInput {itemProperty} />
                             {:else}
-                                不能载入设置项，请检查设置代码实现。 Key: {itemProperty.key}
-                                <br />
-                                can't load settings, check code please. Key:
-                                {itemProperty.key}
+                                Can't load setting item, please check implementation. Key: {itemProperty.key}
                             {/if}
                         </SettingItem>
                     {/each}

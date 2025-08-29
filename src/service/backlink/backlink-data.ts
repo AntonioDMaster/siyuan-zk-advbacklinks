@@ -109,7 +109,7 @@ export async function getBacklinkPanelRenderData(
     const endTime = performance.now(); // 记录结束时间
     const executionTime = endTime - startTime; // 计算时间差
     console.log(
-        `反链面板 生成渲染数据 消耗时间 : ${executionTime} ms `,
+        `Backlink panel: Render data generation took ${executionTime} ms `,
         // `, backlinkPanelRenderDataResult `, backlinkPanelRenderDataResult,
     );
 
@@ -155,7 +155,7 @@ export async function getTurnPageBacklinkPanelRenderData(
     const endTime = performance.now(); // 记录结束时间
     const executionTime = endTime - startTime; // 计算时间差
     console.log(
-        `反链面板 翻页 消耗时间 : ${executionTime} ms `,
+        `Backlink panel: Page turning took ${executionTime} ms `,
         // `, backlinkPanelRenderDataResult `, backlinkPanelRenderDataResult,
     );
 
@@ -448,7 +448,7 @@ async function getBatchBacklinkDoc(
 
     // 碰到一种奇怪的现象， getBacklinkDoc 接口返回数据不全时，调用一下 getBacklink2 就好了。。
     if (backlinkBlockNodeArray.length > backlinkDcoDataResult.length) {
-        console.log("反链过滤面板插件 疑似 getBacklinkDoc 接口数据不全，如果清除缓存刷新后还是不全，请反馈开发者。 ");
+        console.log("Backlink panel: Suspected incomplete getBacklinkDoc response. If clearing cache and refreshing still fails, please report to the developer.");
         console.log("backlinkBlockNodeArray ", backlinkBlockNodeArray, " ,backlinkDcoDataResult ", backlinkDcoDataResult);
         getBacklink2(curRootId, "", "", "3", "3")
     }
@@ -747,7 +747,7 @@ export async function getBacklinkPanelData(
     const endTime = performance.now(); // 记录结束时间
     const executionTime = endTime - startTime; // 计算时间差
     console.log(
-        `反链面板 获取和处理数据 消耗时间 : ${executionTime} ms `,
+        `Backlink panel: Fetching and processing data took ${executionTime} ms `,
         // `, 数据 : backlinkPanelData `, backlinkPanelData
     );
     let cacheAfterResponseMs = SettingService.ins.SettingConfig.cacheAfterResponseMs;

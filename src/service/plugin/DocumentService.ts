@@ -272,7 +272,7 @@ function hadnleClickEditorTitleIcon(e) {
     (e.detail.menu as Menu).addItem({
         icon: "BacklinkPanelFilter",
         type: "submenu",
-        label: "反链过滤面板",
+        label: EnvConfig.ins.i18n.menuBacklinkPanel,
         submenu: getDocumentBlockIconMenus(e)
     });
 }
@@ -284,7 +284,7 @@ function getDocumentBlockIconMenus(e) {
     }
     let submenus = [];
     submenus.push({
-        label: "恢复默认",
+        label: EnvConfig.ins.i18n.menuResetDefault,
         click: async () => {
             await BacklinkFilterPanelAttributeService.ins.updateDocumentBottomShowPanel(rootId, null);
             let documentBottomDisplay = SettingService.ins.SettingConfig.documentBottomDisplay;
@@ -297,7 +297,7 @@ function getDocumentBlockIconMenus(e) {
         }
     });
     submenus.push({
-        label: "始终显示该文档底部反链",
+        label: EnvConfig.ins.i18n.menuAlwaysShowDocBottomBacklink,
         click: async () => {
             await BacklinkFilterPanelAttributeService.ins.updateDocumentBottomShowPanel(rootId, 1);
 
@@ -306,7 +306,7 @@ function getDocumentBlockIconMenus(e) {
         }
     });
     submenus.push({
-        label: "始终隐藏该文档底部反链",
+        label: EnvConfig.ins.i18n.menuAlwaysHideDocBottomBacklink,
         click: async () => {
             BacklinkFilterPanelAttributeService.ins.updateDocumentBottomShowPanel(rootId, -1);
             let docuemntContentElement = e.detail.protyle.contentElement as HTMLElement;
